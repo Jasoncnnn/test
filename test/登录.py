@@ -22,11 +22,12 @@ def ChromeDriver(url):
 class login(object):
 
     def __init__(self,user,STU_num,code):
-        self.user=user
-        self.STU_num=STU_num
-        self.code=code
+        self.user=user        #一卡通
+        self.STU_num=STU_num  #学号
+        self.code=code        #信息门户密码
 
-    def VPN_login(self):
+    #从VPN转入到预约界面
+    def VPN_login(self): 
         driver=ChromeDriver('https://vpn.seu.edu.cn')
         input_list=driver.find_elements_by_class_name('input-txt')
         input_tick=driver.find_element_by_class_name('checkbox__mark.checkbox--small')
@@ -51,8 +52,9 @@ class login(object):
         time.sleep(1)
         driver.switch_to_window(driver.window_handles[2])
         return driver
-
-    def Subscribe_Menu(self,driver):
+    
+    #登录预约界面
+    def Subscribe_login(self,driver):
         wait=WebDriverWait(driver,10)
         wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,'li[class="login lg_act login_hide"]')))
         click_login=driver.find_element_by_css_selector('li[class="login lg_act login_hide"]')
@@ -66,7 +68,10 @@ class login(object):
         input_pwd.send_keys(self.code)
         input_pwd.send_keys(Keys.ENTER) 
         time.sleep(5)
-        #driver.switch_to_window(driver.window_handles[2]) 
+        return driver
+    
+    #交互菜单
+    def Interactive_Menu(self,driver):
         wait=WebDriverWait(driver,10)   
         wait.until(EC.presence_of_element_located((By.CSS_SELECTOR,'li[class="it"]')))
         room_list=driver.find_elements_by_css_selector('li[class="it"]')
@@ -100,6 +105,12 @@ class login(object):
                         print('您已选择单人研读间')
                     elif(a=='2'):
                         print('您已选择彩色研讨大间')
+    
+
+    #守株待兔
+    def SeatKiller(self,driver):
+        wait=WebDriverWait(driver,10)
+        
 
   
  
@@ -108,7 +119,8 @@ class login(object):
 if __name__=='__main__':   
     LibSeatKiller=login('213170812','16017522','haq1999101!!!')
     driver=LibSeatKiller.VPN_login()
-    LibSeatKiller.Subscribe_Menu(driver)
+    driver=LibSeatKiller.Subscribe_login(driver)
+    LibSeatKiller.Interactive_Menu(driver)
     while(True):
         continue
     
