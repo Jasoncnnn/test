@@ -1,3 +1,9 @@
+'''
+auth:hu anqing
+date:2020.3.31
+description:实现了自动从VPN登入到东南大学图书馆并进入研讨室预约系统自动登录
+            初步构建了交互菜单
+'''
 import time 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
