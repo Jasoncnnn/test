@@ -113,11 +113,12 @@ class login(object):
         
 
   
+
  
 
 
 if __name__=='__main__':   
-    LibSeatKiller=login('213170812','16017522','haq1999101!!!')
+    LibSeatKiller=login('user','STU_num','code')
     driver=LibSeatKiller.VPN_login()
     driver=LibSeatKiller.Subscribe_login(driver)
     LibSeatKiller.Interactive_Menu(driver)
