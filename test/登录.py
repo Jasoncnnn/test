@@ -25,6 +25,7 @@ class login(object):
         self.user=user        #一卡通
         self.STU_num=STU_num  #学号
         self.code=code        #信息门户密码
+        self.Date_Today=time.strftime('%Y-%m-%d')#今天的日期
 
     #从VPN转入到预约界面
     def VPN_login(self): 
@@ -97,7 +98,7 @@ class login(object):
                     print('返回成功！')
                     break
                 elif(b=='1'):
-                    print('确认成功！\n请选择想要预定的时间（格式：8：00-11：30）:')
+                    print('确认成功！\n请选择想要预定的时间:1、今天 2、明天 3、后天')
                     flag=0
                 else:
                     print('越界！请重新选择')
@@ -105,19 +106,43 @@ class login(object):
                         print('您已选择单人研读间')
                     elif(a=='2'):
                         print('您已选择彩色研讨大间')
-    
+        
+        #定位日期页面
+        Target_date=input()
+        input_today=driver.find_element_by_xpath('//td[@date="%s"]'%self.Date_Today)
+        today_index=input_today.get_attribute('index')
+        if(Target_date=='2'):
+            if(int(today_index)+1>6):
+                input_nextpage=driver.find_element_by_class_name('cld-bt-next')
+                input_nextpage.click()
+                Target_index=0
+            else:
+                Target_index=int(today_index)+1
+            input_targetdate=driver.find_element_by_xpath('//td[@index="%s"]'%str(Target_index))
+            input_targetdate.click()
+        elif(Target_date=='3'):
+            if(int(today_index)+2>6):
+                input_nextpage=driver.find_element_by_class_name('cld-bt-next')
+                input_nextpage.click()
+                Target_index=int(today_index)+2-7
+            else:
+                Target_index=int(today_index)+2
+            input_targetdate=driver.find_element_by_xpath('//td[@index="%s"]'%str(Target_index))
+            input_targetdate.click()
+        #定位具体时间段
+        Target_time=input('请输入想要预定的时间（格式8：30-11：25）：')
 
     #守株待兔
     def SeatKiller(self,driver):
         wait=WebDriverWait(driver,10)
-        
+
 
   
  
 
 
 if __name__=='__main__':   
-    LibSeatKiller=login('213170812','16017522','haq1999101!!!')
+    LibSeatKiller=login('user','STU_num','code')#此处修改成自己的私人信息
     driver=LibSeatKiller.VPN_login()
     driver=LibSeatKiller.Subscribe_login(driver)
     LibSeatKiller.Interactive_Menu(driver)
